@@ -1,1 +1,87 @@
-Hello World
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Personal Website</title>
+  <style>
+    body {
+      font-family: Avenir, sans-serif;
+      
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: white;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    nav li {
+      display: inline-block;
+      margin-left: 20px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    h1 {
+      text-align: center;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 50px;
+    }
+    p {
+      margin: 20px;
+    }
+    ul {
+      margin: 20px;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>My Personal Website</h1>
+    <ul>
+      <li><a href="#landing-page">Home</a></li>
+      <li><a href="#about-me">About Me</a></li>
+      <li><a href="#my-projects">My Projects</a></li>
+    </ul>
+  </nav>
+  <h2 id="landing-page">Home</h2>
+  <p>Welcome to my personal website! Here you will find some general information about me and my projects.</p>
+  <h2 id="about-me">About Me</h2>
+  <p>Here is some general information about me:</p>
+  <ul>
+    <li>My name is Justin Dominic</li>
+    <li>I am a sophomore at Yale studying CS & Econ</li>
+  </ul>
+  <h2 id="my-projects">My Projects</h2>
+  <p>Here are some of the projects that I am currently working on:</p>
+  <ul>
+    <li><a href="https://www.project1.com">Project 1</a></li>
+    <li><a href="https://www.project2.com">Project 2</a></li>
+  </ul>
+  <script>
+    var links = document.querySelectorAll("nav a");
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener("click", function(e) {
+        e.preventDefault();
+        var sectionId = this.getAttribute("href");
+        var section = document.querySelector(sectionId);
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      });
+    }
+  </script>
