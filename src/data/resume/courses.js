@@ -48,7 +48,6 @@ const courses = [
     link: 'http://catalog.yale.edu/ycps/courses/econ/',
     university: 'Yale',
   },
-  
 ];
 
 export default courses;
