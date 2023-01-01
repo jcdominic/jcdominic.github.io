@@ -11,10 +11,10 @@
     "node": ">=14.x"
   },
   "scripts": {
-    "build": "rimraf ./build && react-scripts build",
+    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && rimraf ./build && react-scripts build",
     "predeploy": "npm run build && react-snap",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
+    "start": "export SET NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
     "lint": "eslint $(git ls-files '*.js')",
     "test": "react-scripts test --watchAll=false",
     "analyze": "npm run build && source-map-explorer build/static/js/*.chunk.js"
