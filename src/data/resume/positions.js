@@ -2,6 +2,7 @@ const positions = [
   {
     company: 'Yale University',
     position: 'Undergraduate Learning Assistant',
+    link: 'https://cpsc.yale.edu/',
     location: 'New Haven, CT',
     daterange: '2022-Present',
     points: [
@@ -12,6 +13,7 @@ const positions = [
   {
     company: 'Student Technology Collaborative',
     position: 'Student Technician Coordinator',
+    link: 'https://studenttechnology.yale.edu/student-resources/about-stc',
     location: 'New Haven, CT',
     daterange: '2021-Present',
     points: [
@@ -23,6 +25,7 @@ const positions = [
   {
     company: 'Code Haven',
     position: 'Treasurer',
+    link: 'http://codehavenyale.org/',
     location: 'New Haven, CT',
     daterange: '2021-Present',
     points: [
@@ -33,6 +36,7 @@ const positions = [
   {
     company: 'Accenture',
     position: 'Learning2Lead Summer Intern',
+    link: 'https://www.accenture.com/us-en',
     location: 'Los Angeles, CA',
     daterange: '2021',
     points: [
@@ -43,7 +47,8 @@ const positions = [
   {
     company: 'Pioneer Global Research Program',
     position: 'Computer Science Researcher',
-    location: '',
+    link: 'https://pioneeracademics.com/',
+    location: 'Los Angeles, CA',
     daterange: '2020',
     points: [
       'Conducted individual academic research on algorithm analysis with Hamilton College Computer Science Professor David Perkins (dperkins@hamilton.edu).',
@@ -53,6 +58,7 @@ const positions = [
   {
     company: 'FIRST Robotics Team 3408: cyberCubs',
     position: 'Code and Marketing Lead',
+    link: 'https://www.loyolahs.edu/studentlife/student-activities/robotics/',
     location: 'Los Angeles, CA',
     daterange: '2018-2021',
     points: [
@@ -61,9 +67,10 @@ const positions = [
     ],
   },
   {
-    company: 'Riordan Scholars',
-    position: 'UCLA Anderson School of Management Vice President',
-    location: '',
+    company: 'UCLA Anderson School of Management: Riordan Scholars Program',
+    position: 'Vice President',
+    link: 'https://www.anderson.ucla.edu/specialized-academic-programs/riordan-programs/riordan-scholars-program',
+    location: 'Los Angeles, CA',
     daterange: '2018-2021',
     points: [
       'Co-managed a 12-person leadership team responsible for social media, community events, networking, and other projects.',
