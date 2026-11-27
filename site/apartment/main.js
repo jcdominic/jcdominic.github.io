@@ -237,6 +237,11 @@ box(1, 2.1, 0, 6, 3.1, 0.55, faces(M.cabinet, { ny: M.trim }), { solid: true });
 // Little table and stools, under the beach window
 box(1.4, 0.85, 2.6, 3, 0.95, 3.8, M.lightWood, { solid: true });
 legs(1.45, 2.65, 2.95, 3.75, 0.85, M.darkWood);
+// A pint of Guinness on a coaster, settled, with its creamy head
+box(2.22, 0.95, 2.92, 2.48, 0.958, 3.18, color("#c9a46a")); // coaster
+box(2.29, 0.958, 2.99, 2.41, 1.1, 3.11, color("#1e0f0a", 0.15)); // stout, narrow at the bottom
+box(2.28, 1.1, 2.98, 2.42, 1.2, 3.12, faces(color("#1e0f0a", 0.15), { px: art(T.pintFront(), 0.14, 0.1) })); // flaring out, G facing the room
+box(2.28, 1.2, 2.98, 2.42, 1.245, 3.12, color("#efe4c8", 0.04)); // head
 for (const [x, z] of [[1.95, 4.1], [1.95, 1.9]]) {
   box(x, 0.5, z, x + 0.5, 0.58, z + 0.5, M.darkWood, { solid: true });
   legs(x + 0.03, z + 0.03, x + 0.47, z + 0.47, 0.5, M.darkWood, scene, 0.06);
