@@ -14,12 +14,15 @@
 
 <div id="hud">
   <div id="crosshair" aria-hidden="true"></div>
+  <div id="grab-hint">Press any key or click to look around</div>
   <div id="hover" hidden></div>
   <div id="bar">
     <div id="hotbar"></div>
     <div id="found"></div>
   </div>
 </div>
+
+<div id="cursor" hidden aria-hidden="true"></div>
 
 <div id="dpad" aria-hidden="true">
   <button data-dir="fl" class="diag" tabindex="-1"></button>
@@ -39,7 +42,8 @@
     <p class="tagline">Come on in. Poke around.</p>
     <button id="enter" class="btn">Step inside</button>
     <a class="btn" href="/">Back to the regular site</a>
-    <p class="controls desktop-only">WASD to walk &middot; mouse to look &middot; click to use &middot; Esc to pause</p>
+    <button id="fullscreen" class="btn btn-small desktop-only" hidden>Fullscreen: off</button>
+    <p class="controls desktop-only">WASD to walk &middot; mouse to look &middot; click or E to use &middot; Esc to pause &middot; F for fullscreen</p>
     <p class="controls touch-only">Arrows to walk &middot; middle button to jump &middot; drag to look &middot; tap things to use them</p>
   </div>
 </div>
@@ -49,6 +53,7 @@
     <button id="panel-close" class="btn" aria-label="Close">&times;</button>
     <h2 id="panel-title"></h2>
     <div id="panel-body"></div>
+    <p class="panel-hint desktop-only">E or Esc to close</p>
   </div>
 </div>
 

@@ -62,7 +62,7 @@ html, body {
   padding: 0.55em 1em 0.65em;
   cursor: pointer;
 }
-.btn:hover, .btn:focus-visible {
+.btn:hover, .btn:focus-visible, .btn.hot {
   background: #7f89b8;
   box-shadow: inset 2px 2px 0 #b3bce0, inset -2px -3px 0 #4f5785;
   outline: none;
@@ -139,6 +139,18 @@ body.playing:not(.touch) #game { cursor: none; }
 }
 body.playing #crosshair { opacity: 0.9; }
 body.touch #crosshair { display: none; }
+
+#grab-hint {
+  display: none;
+  left: 50%;
+  top: calc(50% + 1.5rem);
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0.75;
+  text-shadow: 2px 2px 0 var(--shadow);
+}
+body.unlocked #grab-hint { display: block; }
 
 #hover {
   left: 50%;
@@ -340,3 +352,38 @@ body.touch.playing #dpad { display: grid; }
 #panel-body .note { margin: 0.2rem 0 0; color: #eee; }
 #panel-body li img { display: block; width: 100%; height: auto; margin-top: 0.5rem; border: 2px solid #373737; }
 #panel-body .placeholder { opacity: 0.6; font-style: italic; }
+#panel-body a.title.hot { color: #d4eeff; }
+
+.panel-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.8rem;
+  color: #555;
+  text-align: right;
+}
+
+.btn-small {
+  justify-self: center;
+  font-size: 0.85rem;
+  padding: 0.3em 0.9em 0.4em;
+}
+
+/* The in-game cursor shown in panels while the mouse is captured. */
+#cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 22px;
+  margin: -1px 0 0 -1px;
+  pointer-events: none;
+  z-index: 10;
+  filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000);
+}
+#cursor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  clip-path: polygon(0 0, 0 82%, 30% 64%, 48% 100%, 62% 94%, 45% 59%, 80% 59%);
+}
+body.vcursor, body.vcursor * { cursor: none !important; }

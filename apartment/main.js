@@ -582,6 +582,7 @@ function setState(next) {
   keys.clear();
   resetPad();
   ui.showMenu(state === "menu");
+  if (state !== "panel") ui.showCursor(false);
   document.body.classList.toggle("playing", state === "playing");
   if (state !== "playing") {
     target = null;
@@ -601,8 +602,10 @@ function use(id) {
   }
   if (id === "tv" && tvOnAt === null) tvOnAt = performance.now();
   setState("panel");
-  if (document.pointerLockElement) document.exitPointerLock();
   ui.openPanel(id);
+  // Keep the mouse captured and steer a little in-game cursor instead, so closing the
+  // panel drops you straight back in without the browser making you click first.
+  ui.showCursor(locked());
 }
 
 // Back into the game. Browsers often won't re-capture the mouse without a click
@@ -630,50 +633,74 @@ let lockedAt = 0;
 document.addEventListener("pointerlockchange", () => {
   if (locked()) {
     lockedAt = performance.now();
-    if (state !== "playing") setState("playing");
+    if (state === "panel") ui.showCursor(true);
+    else if (state !== "playing") setState("playing");
+  } else if (state === "panel") {
+    // The browser took the mouse back with a panel open (Esc, outside fullscreen).
+    // Treat it as closing the panel.
+    ui.closePanel();
   } else if (state === "playing" && performance.now() - lockedAt > 500) {
     // The player pressed Esc. (Losing the mouse a moment after getting it back is
     // just the browser being fussy, so that one we ignore.)
     setState("menu");
   }
 });
+// Going in or out of fullscreen can drop the mouse; grab it again if we can.
+document.addEventListener("fullscreenchange", () => state === "playing" && lock());
 
 document.addEventListener("keydown", (e) => {
   if (state !== "playing") return;
   keys.add(e.code);
   if (e.code === "KeyE") use(stationAt());
-  if (e.code === "Escape" && !locked()) setState("menu");
+  if (e.code === "KeyF") ui.toggleFullscreen();
+  if (e.code === "Escape") {
+    // In fullscreen, Esc comes to us instead of the browser, so pause ourselves.
+    setState("menu");
+    if (locked()) document.exitPointerLock();
+  }
   // Any key except Esc counts as a gesture, so the browser lets us grab the mouse again.
-  else if (!locked()) lock();
+  // (Not if that key just opened a panel: the panel works with the normal cursor.)
+  else if (state === "playing" && !locked() && e.code !== "KeyF") lock();
   if (e.code.startsWith("Arrow") || e.code === "Space") e.preventDefault();
 });
 document.addEventListener("keyup", (e) => keys.delete(e.code));
 addEventListener("blur", () => keys.clear());
 
 document.addEventListener("mousemove", (e) => {
+  if (state === "panel" && locked()) return ui.moveCursor(e.movementX, e.movementY);
   if (state !== "playing" || touch || !(locked() || e.target === canvas)) return;
   if (Math.abs(e.movementX) > 250 || Math.abs(e.movementY) > 250) return; // browsers glitch on lock changes
   look(e.movementX * 0.0022, e.movementY * 0.0022);
 });
 document.addEventListener("mousedown", (e) => {
+  if (state === "panel" && locked() && e.button === 0) return ui.clickCursor();
   if (state !== "playing" || touch || e.button !== 0 || !(locked() || e.target === canvas)) return;
   const id = stationAt();
   if (id) use(id);
   else lock();
 });
 
+// With the mouse captured, the scroll wheel goes to the game, so pass it to the panel.
+document.addEventListener("wheel", (e) => state === "panel" && locked() && ui.scrollPanel(e.deltaY), { passive: true });
+
 // Without the mouse captured, the hidden cursor can hit the edge of the window and stop
-// you turning. So pushing it against the left or right edge keeps turning you that way.
-const pointer = { x: 0, inside: false };
-canvas.addEventListener("mousemove", (e) => ((pointer.x = e.clientX), (pointer.inside = true)));
+// you turning. So pushing it against the left or right edge keeps turning you that way,
+// but only while you're actually pushing: once the mouse goes still, so do you.
+const pointer = { x: 0, inside: false, movedAt: 0, dir: 0 };
+canvas.addEventListener("mousemove", (e) => {
+  pointer.x = e.clientX;
+  pointer.inside = true;
+  pointer.movedAt = performance.now();
+  pointer.dir = Math.sign(e.movementX);
+});
 canvas.addEventListener("mouseleave", () => (pointer.inside = false));
 function edgeTurn(dt) {
-  if (touch || locked() || !pointer.inside) return;
-  const zone = Math.min(80, innerWidth * 0.08);
+  if (touch || locked() || !pointer.inside || performance.now() - pointer.movedAt > 120) return;
+  const zone = Math.min(60, innerWidth * 0.06);
   let push = 0;
   if (pointer.x < zone) push = -(1 - pointer.x / zone);
   else if (pointer.x > innerWidth - zone) push = 1 - (innerWidth - pointer.x) / zone;
-  if (push) look(push * 2.6 * dt, 0);
+  if (push && pointer.dir !== -Math.sign(push)) look(push * 1.6 * dt, 0); // not while pulling away
 }
 
 // Touch, Pocket Edition style: an arrow pad in the corner (jump in the middle),
@@ -768,6 +795,10 @@ let cursor = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
+
+  // Without the mouse captured, the hidden cursor can wander off the page, where clicks
+  // don't reach the game. Say how to get it back.
+  document.body.classList.toggle("unlocked", state === "playing" && !touch && !locked());
 
   if (state === "playing") {
     edgeTurn(dt);
