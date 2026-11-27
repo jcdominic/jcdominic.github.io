@@ -4,35 +4,109 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bookshelf | Justin Dominic</title>
+<meta name="description" content="What Justin Dominic is reading, what’s on deck, and favorite books, movies, and TV shows.">
 <link rel="icon" href="/favicon.png">
 <link rel="stylesheet" href="/style.css">
+<style>
+.note-trigger {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  anchor-name: --rowling;
+}
+
+.bookshelf-note {
+  box-sizing: border-box;
+  width: 13rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.85em 1em;
+  color: #2c260e;
+  background: #fff3a8;
+  border: 1px solid #e3cf74;
+  box-shadow: 2px 4px 8px #0002;
+  position-anchor: --rowling;
+  position-area: bottom;
+  position-try-fallbacks: flip-block;
+}
+
+.bookshelf-note p {
+  margin: 0;
+}
+
+.bookshelf-note p + p {
+  margin-top: 0.65em;
+}
+
+@supports not selector(:popover-open) {
+  .bookshelf-note {
+    display: none;
+  }
+}
+</style>
 </head>
 <body>
 
-<p><a href="/">Justin Dominic</a></p>
+<p><a href="/">Home</a></p>
 
+<main>
 <h1>Bookshelf</h1>
-<p>[A line about what this is, e.g. books I love, return to, or push on people.]</p>
 
-<!--
-  One entry per book. The note (<dd>) is optional; leave it out for a bare entry.
-  Rename, add, or drop sections as the shelf grows.
+<h2>Currently reading</h2>
+<ul>
+<li><cite>Abundance</cite> by Ezra Klein and Derek Thompson</li>
+<li><cite>Crime and Punishment</cite> by Fyodor Dostoevsky</li>
+<li><cite>Confessions</cite> by St. Augustine</li>
+<li><cite>Crown of Midnight</cite> by Sarah J. Maas</li>
+<li><cite>Interior Castle</cite> by St. Teresa of Ávila</li>
+</ul>
 
-  <dt><cite>Title</cite> by Author</dt>
-  <dd>A sentence or two about why it's here.</dd>
--->
+<h2>On deck</h2>
+<ul>
+<li><cite>East of Eden</cite> by John Steinbeck</li>
+<li><cite>Algospeak</cite> by Adam Aleksic</li>
+<li><cite>Animal Farm</cite> by George Orwell</li>
+<li><cite>1984</cite> by George Orwell</li>
+</ul>
 
-<h2>Favorites</h2>
-<dl>
-<dt>[<cite>Title</cite> by Author]</dt>
-<dd>[Optional note.]</dd>
-</dl>
+<h2>All-time favorite books</h2>
+<ul>
+<li><cite>The Giver</cite> by Lois Lowry</li>
+<li><cite>The Gospel of John</cite></li>
+<li>
+  <cite>Harry Potter</cite> by <button class="note-trigger" type="button" popovertarget="rowling-note" popovertargetaction="show">J. K. Rowling</button>
+  <div class="bookshelf-note" id="rowling-note" popover>
+    <p>How did Harry Potter get down a hill?</p>
+    <p><strong>Walking. J.K., rolling.</strong></p>
+  </div>
+</li>
+<li><cite>Jesus and the Jewish Roots of the Eucharist</cite> by Brant Pitre</li>
+<li><cite>The Kite Runner</cite> by Khaled Hosseini</li>
+<li><cite>The Lamb’s Supper</cite> by Scott Hahn</li>
+<li><cite>Percy Jackson</cite> by Rick Riordan (I’ve probably read <cite>The Son of Neptune</cite> at least ten times.)</li>
+<li><cite>Red Rising</cite> by Pierce Brown (the whole series)</li>
+<li><cite>Shadowhunters</cite> by Cassandra Clare</li>
+<li><cite>A Thousand Splendid Suns</cite> by Khaled Hosseini</li>
+</ul>
 
-<h2>Recommendations</h2>
-<dl>
-<dt>[<cite>Title</cite> by Author]</dt>
-<dd>[Optional note.]</dd>
-</dl>
+<h2>Movies &amp; TV</h2>
+
+<h3>All-time favorites</h3>
+<ul>
+<li><cite>Interstellar</cite></li>
+<li><cite>Avatar: The Last Airbender</cite></li>
+<li><cite>Severance</cite></li>
+<li><cite>Jack Ryan</cite></li>
+</ul>
+
+<h3>On deck</h3>
+<ul>
+<li><cite>Good Will Hunting</cite></li>
+<li><cite>Dead Poets Society</cite></li>
+</ul>
+</main>
 
 </body>
 </html>
