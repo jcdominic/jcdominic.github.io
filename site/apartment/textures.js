@@ -788,3 +788,14 @@ export function corpus() {
   px(ctx, 7, 18, ivory, 2, 1);
   return c;
 }
+
+// The top of the pint glass: dark stout with a white capital G just under the head,
+// where the wordmark sits on the real glass (so you can split the G). 14x10.
+export function pintFront() {
+  const r = rng(79);
+  const [c, ctx] = make(14, 10);
+  noise(ctx, 0, 0, 14, 10, "#1e0f0a", 0.15, r);
+  const g = [".###.", "#...#", "#....", "#.###", "#...#", "#...#", ".###."];
+  g.forEach((row, y) => [...row].forEach((ch, x) => ch === "#" && px(ctx, 5 + x, 1 + y, "#f4f1ea")));
+  return c;
+}
