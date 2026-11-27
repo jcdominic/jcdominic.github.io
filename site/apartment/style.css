@@ -256,19 +256,7 @@ body.touch.playing #dpad { display: grid; }
 @media (max-height: 520px), (max-width: 600px) {
   .slot { width: 2.6rem; height: 2.6rem; padding: 0.4rem; }
   #found { font-size: 0.75rem; }
-  #grab-hint {
-  display: none;
-  left: 50%;
-  top: calc(50% + 1.5rem);
-  transform: translateX(-50%);
-  font-size: 0.8rem;
-  white-space: nowrap;
-  opacity: 0.75;
-  text-shadow: 2px 2px 0 var(--shadow);
-}
-body.unlocked #grab-hint { display: block; }
-
-#hover { bottom: calc(5.25rem + env(safe-area-inset-bottom)); }
+  #hover { bottom: calc(5.25rem + env(safe-area-inset-bottom)); }
 }
 
 /* ---------- info panel ---------- */
