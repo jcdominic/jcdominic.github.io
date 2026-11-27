@@ -65,14 +65,87 @@ export function init({ onEnter, onClose, onPick }) {
 
   panel.addEventListener("click", (e) => e.target === panel && close());
   $("#panel-close").addEventListener("click", close);
-  // Close on key *up*: if we grab the mouse back while Esc is still down,
+  // E closes a panel, like an inventory. Stop the event here so the game doesn't
+  // see the same E press and open the panel right back up.
+  // Esc closes on key *up*: if we grab the mouse back while Esc is still down,
   // the browser's own Esc handling lets go of it again straight away.
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !panel.hidden) e.preventDefault();
+    if (panel.hidden) return;
+    if (e.code === "KeyE" && !e.repeat) {
+      e.stopImmediatePropagation();
+      close();
+    }
+    if (e.key === "Escape") e.preventDefault();
   });
   document.addEventListener("keyup", (e) => {
     if (e.key === "Escape" && !panel.hidden) close();
   });
+
+  // Optional fullscreen. In Chrome and Edge it also lets Esc close panels without
+  // the browser letting go of the mouse.
+  const fs = $("#fullscreen");
+  if (document.fullscreenEnabled) {
+    fs.hidden = false;
+    fs.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", () => {
+      fs.textContent = document.fullscreenElement ? "Fullscreen: on" : "Fullscreen: off";
+    });
+  }
+}
+
+export async function toggleFullscreen() {
+  if (!document.fullscreenEnabled) return;
+  try {
+    if (document.fullscreenElement) return await document.exitFullscreen();
+    await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+    await navigator.keyboard?.lock?.(["Escape"]);
+  } catch {}
+}
+
+export function closePanel() {
+  if (!panel.hidden) close();
+}
+
+// ---------- the in-game cursor, for panels opened while the mouse is captured ----------
+
+const cursor = $("#cursor");
+let cx = 0, cy = 0, hot = null;
+
+export function showCursor(show) {
+  cursor.hidden = !show;
+  document.body.classList.toggle("vcursor", show);
+  if (show) {
+    cx = innerWidth / 2;
+    cy = innerHeight / 2;
+    moveCursor(0, 0);
+  } else setHot(null);
+}
+
+export function moveCursor(dx, dy) {
+  cx = Math.max(0, Math.min(innerWidth - 1, cx + dx));
+  cy = Math.max(0, Math.min(innerHeight - 1, cy + dy));
+  cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+  setHot(document.elementFromPoint(cx, cy)?.closest("#panel a, #panel button") ?? null);
+}
+
+function setHot(el) {
+  if (el === hot) return;
+  hot?.classList.remove("hot");
+  el?.classList.add("hot");
+  hot = el;
+}
+
+export function clickCursor() {
+  const el = document.elementFromPoint(cx, cy);
+  if (!el || el === panel || el.closest("#panel-close")) return close(); // outside the box, or the x
+  const link = el.closest("#panel a");
+  if (!link) return;
+  if (link.target === "_blank") window.open(link.href, "_blank", "noopener");
+  else location.href = link.href;
+}
+
+export function scrollPanel(dy) {
+  panelBody.scrollBy(0, dy);
 }
 
 function close() {
