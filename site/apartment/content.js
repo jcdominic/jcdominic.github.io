@@ -50,36 +50,36 @@ export const stations = {
   },
 
   desk: {
-    hidden: true, // Resume coming soon. Delete this line to make the desk clickable.
     name: "Desk",
-    hint: "Work & projects",
+    hint: "Work & education",
     title: "The desk",
-    intro: "I live in San Francisco and work in consulting at Accenture.",
     sections: [
       {
-        heading: "Experience",
+        heading: "Work",
         items: [
-          { title: "Accenture", meta: "[Role], [Years]", note: "[What you work on.]" },
-          { title: "[Previous role]", meta: "[Years]" },
+          {
+            title: "Accenture",
+            meta: "Senior Analyst",
+            note: "I help companies use AI better and make pretty slides.",
+          },
         ],
       },
       {
         heading: "Education",
-        items: [{ title: "Yale University", meta: "Computer science and economics" }],
-      },
-      {
-        heading: "Working on",
         items: [
-          { title: "This apartment", note: "A blocky little 3D version of my website." },
-          { title: "[Project]", note: "[One line about it.]" },
+          {
+            title: "Yale University",
+            meta: "B.S. in computer science and economics, with distinction",
+            note: "I read some good books, wrote some code, and bought an unreasonable number of tortillas.",
+          },
+          { title: "Loyola High School", meta: "Valedictorian", note: "I told FRC Team 3408's robots what to do." },
         ],
       },
       {
-        heading: "More",
         items: [
+          { title: "More about my work and coursework", link: "/work/" },
           { title: "LinkedIn", link: "https://www.linkedin.com/in/justincdominic/" },
           { title: "GitHub", link: "https://github.com/jcdominic" },
-          { title: "[Resume PDF]", note: "[Drop a resume.pdf in this folder and link it here.]" },
         ],
       },
     ],
