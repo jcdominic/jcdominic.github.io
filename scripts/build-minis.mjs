@@ -6,9 +6,9 @@
 // Each puzzle is {rows: [5 strings of A–Z or #], across: [...], down: [...]},
 // with clues in number order. The build fails on any problem it finds.
 import {readFileSync, writeFileSync, readdirSync, unlinkSync} from "node:fs";
-import {readPuzzle} from "../site/crossword/puzzle.mjs";
+import {readPuzzle} from "../site/mini/puzzle.mjs";
 
-const dir = new URL("../site/crossword/puzzles/", import.meta.url);
+const dir = new URL("../site/mini/puzzles/", import.meta.url);
 const packSize = 28;
 const packs = () => readdirSync(dir).filter(f => /^\d+\.json$/.test(f)).sort((a, b) => parseInt(a) - parseInt(b));
 

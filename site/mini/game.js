@@ -1,4 +1,5 @@
 import {issueToday, issueDate, readPuzzle, formatTime, initialState, writeLetter, eraseLetter, nextEntry, step, mistakes, streak} from "./puzzle.mjs";
+import {record, everyone, recording} from "./results.mjs";
 
 const $ = id => document.getElementById(id);
 const dateFormat = new Intl.DateTimeFormat("en-US", {
@@ -18,7 +19,8 @@ const panel = $("panel");
 const board = $("board");
 const cells = [];
 const labels = [];
-let puzzle, state;
+let puzzle, state, puzzleNumber;
+let solveSent = Promise.resolve();
 let runningSince = null;
 let saveTask = 0;
 let engaged = false;
@@ -48,9 +50,19 @@ function save() {
 }
 function startClock() {
   if (!state.solved && !panel.open && !document.hidden && runningSince === null) {
-    state.started = true;
+    if (!state.started) {
+      state.started = true;
+      send("start");
+    }
     runningSince = performance.now();
   }
+}
+// One anonymous row per start, check and solve, for measuring difficulty.
+function send(event, extra) {
+  return record({
+    issue, puzzle: puzzleNumber, event, ms: Math.round(elapsed()),
+    checked: state.checked, on_day: issue === today(), touch, ...extra,
+  });
 }
 function stopClock() {
   if (runningSince !== null) {
@@ -123,6 +135,7 @@ function boardKey(value) {
     state.solvedDay = today();
     feedback("");
     stopClock();
+    solveSent = send("solve");
     render();
     celebrate();
     showPanel("solved");
@@ -135,6 +148,7 @@ function boardKey(value) {
 }
 function revealMistakes() {
   state.checked = true;
+  send("check", {wrong: mistakes(puzzle, state).flatMap((wrong, i) => wrong ? [i] : [])});
   feedback("Wrong letters are marked in red. Solves with a check still count, but they don’t set a best time.");
   interact();
 }
@@ -272,7 +286,7 @@ function stats(records) {
 }
 function statRow(s) {
   const row = node("div", "", "stats");
-  for (const [value, label] of [[s.solved, "Solved"], [s.streak, "Day streak"], [s.best === null ? "–" : formatTime(s.best), "Best"], [s.average === null ? "–" : formatTime(s.average), "Average"]]) {
+  for (const [value, label] of [[s.solved, "Solved"], [s.streak, "Streak"], [s.best === null ? "–" : formatTime(s.best), "Best"], [s.average === null ? "–" : formatTime(s.average), "Average"]]) {
     const cell = node("div", "");
     cell.append(node("strong", String(value)), node("span", label));
     row.append(cell);
@@ -364,12 +378,32 @@ function showPanel(kind) {
     body.append(node("p", "Your clock is stopped at " + formatTime(state.ms) + "."), action("Resume", () => panel.close()));
   } else if (kind === "solved") {
     body.append(node("p", "You finished Pocket Mini #" + issue + " in " + formatTime(state.ms) + (state.checked ? " with a check." : "."), "result"));
+    const crowd = node("p", "", "crowd");
+    body.append(crowd);
+    compare(crowd);
     body.append(statRow(stats(readHistory())));
     body.append(action(touch && navigator.share ? "Share result ↗" : "Copy result ↗", shareResult));
     body.append(node("p", issue === latest ? "The next mini arrives in " + untilTomorrow() + "." : "", "fine"));
   }
   if (!panel.open) panel.showModal();
   (body.querySelector("button") ?? $("close")).focus();
+}
+// "Median so far" for this mini, filled in once the solve has been saved.
+async function compare(el) {
+  await solveSent;
+  const row = await everyone(issue);
+  if (!row || !el.isConnected || !row.solves) return;
+  const mine = Math.round(state.ms);
+  const others = [...row.times];
+  if (recording && !state.checked && others.includes(mine)) others.splice(others.indexOf(mine), 1);
+  if (row.solves <= 1) {
+    el.textContent = issue === latest ? "You’re the first to finish today’s mini." : "You’re the first to finish this one.";
+    return;
+  }
+  el.textContent = "Median so far: " + formatTime(row.median_ms);
+  if (!state.checked && others.length) {
+    el.append(document.createElement("br"), "You were faster than " + others.filter(t => t > mine).length + " of " + others.length + " other " + (others.length === 1 ? "solver" : "solvers") + ".");
+  }
 }
 function checkDay() {
   if (today() > issue) {
@@ -406,7 +440,18 @@ function wireControls() {
   $("help-button").onclick = () => showPanel("help");
   $("times-button").onclick = () => showPanel("times");
   $("close").onclick = () => panel.close();
-  panel.addEventListener("click", e => { if (e.target === panel) panel.close(); });
+  // Close on a tap outside the panel, but only one that also started outside it:
+  // the finger lifting off the final key lands here right after the panel opens.
+  const outside = e => {
+    const r = panel.getBoundingClientRect();
+    return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+  };
+  let pressedOutside = false;
+  panel.addEventListener("pointerdown", e => { pressedOutside = outside(e); });
+  panel.addEventListener("click", e => {
+    if (pressedOutside && outside(e)) panel.close();
+    pressedOutside = false;
+  });
   panel.addEventListener("close", () => {
     if (state.started || dialogKind === "pause") startClock();
     if (engaged || dialogKind === "pause") focusCell();
@@ -440,6 +485,7 @@ async function json(url) {
 async function init() {
   const {count, packSize} = await json("puzzles/calendar.json");
   const offset = (issue - 1) % count;
+  puzzleNumber = offset + 1;
   const pack = await json("puzzles/" + (Math.floor(offset / packSize) + 1) + ".json");
   puzzle = readPuzzle(pack[offset % packSize]);
   state = initialState(puzzle, loadRecord(key));
