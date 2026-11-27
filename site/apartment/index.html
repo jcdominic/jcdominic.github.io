@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apartment | Justin Dominic</title>
+<meta name="description" content="Walk around Justin Dominic's (blocky) apartment.">
+<link rel="icon" href="/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="game" aria-label="A blocky 3D studio apartment"></canvas>
+
+<div id="hud">
+  <div id="crosshair" aria-hidden="true"></div>
+  <div id="hover" hidden></div>
+  <div id="bar">
+    <div id="hotbar"></div>
+    <div id="found"></div>
+  </div>
+</div>
+
+<div id="dpad" aria-hidden="true">
+  <button data-dir="fl" class="diag" tabindex="-1"></button>
+  <button data-dir="f" tabindex="-1"></button>
+  <button data-dir="fr" class="diag" tabindex="-1"></button>
+  <button data-dir="l" tabindex="-1"></button>
+  <button data-dir="jump" tabindex="-1"></button>
+  <button data-dir="r" tabindex="-1"></button>
+  <span></span>
+  <button data-dir="b" tabindex="-1"></button>
+  <span></span>
+</div>
+
+<div id="menu" class="screen">
+  <div class="menu-box">
+    <h1>Justin's apartment</h1>
+    <p class="tagline">Come on in. Poke around.</p>
+    <button id="enter" class="btn">Step inside</button>
+    <a class="btn" href="/">Back to the regular site</a>
+    <p class="controls desktop-only">WASD to walk &middot; mouse to look &middot; click to use &middot; Esc to pause</p>
+    <p class="controls touch-only">Arrows to walk &middot; middle button to jump &middot; drag to look &middot; tap things to use them</p>
+  </div>
+</div>
+
+<div id="panel" class="screen" hidden role="dialog" aria-modal="true" aria-labelledby="panel-title">
+  <div class="panel-box">
+    <button id="panel-close" class="btn" aria-label="Close">&times;</button>
+    <h2 id="panel-title"></h2>
+    <div id="panel-body"></div>
+  </div>
+</div>
+
+<div id="no-webgl" class="screen">
+  <div class="menu-box">
+    <h1>Can't open the door</h1>
+    <p class="tagline">This browser can't draw 3D graphics.</p>
+    <a class="btn" href="/">Back to the regular site</a>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
