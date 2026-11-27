@@ -50,7 +50,7 @@ h1 { font: bold clamp(44px, 7.2vw, 76px)/1 var(--serif); letter-spacing: -.067em
 .cell.wrong::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top right, transparent calc(50% - 1px), #c0392b80 calc(50% - 1px), #c0392b80 calc(50% + 1px), transparent calc(50% + 1px)); pointer-events: none; }
 #board.solved .cell:not(.block) { background: #fffefa; }
 #board.solved .letter { color: #185e84; }
-#board.celebrate .cell:not(.block) { animation: pop .5s ease-out calc(var(--i) * 45ms) both; }
+#board.celebrate .cell:not(.block) { animation: pop .5s ease-out calc(var(--i) * 45ms); }
 @keyframes pop { 40% { transform: scale(1.08); background: var(--yellow); } }
 @media (prefers-reduced-motion: reduce) { #board.celebrate .cell:not(.block) { animation: none; } }
 .cell:focus { outline: none; }
@@ -91,6 +91,8 @@ dialog::backdrop { background: #26292190; }
 .fine { font-size: 13px; color: var(--soft-ink); }
 #panel-body .fine:empty { display: none; }
 #panel-body .result { font: 19px/1.35 var(--serif); }
+#panel-body .crowd { margin-top: 6px; color: var(--soft-ink); }
+#panel-body .crowd:empty { display: none; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0; text-align: center; }
 .stats div { display: flex; flex-direction: column; gap: 2px; }
 .stats strong { font: 600 24px var(--sans); font-variant-numeric: tabular-nums; }

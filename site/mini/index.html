@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#faf8f1">
+<title>The Pocket Mini · Justin Dominic</title>
+<meta name="description" content="A little daily crossword from Justin Dominic. Solve the five-by-five and compare times with friends.">
+<link rel="icon" href="/favicon.png">
+<meta property="og:title" content="The Pocket Mini">
+<meta property="og:description" content="A five-by-five crossword that comes out every day. How fast can you solve it?">
+<link rel="stylesheet" href="crossword.css">
+<link rel="modulepreload" href="puzzle.mjs">
+<link rel="modulepreload" href="results.mjs">
+<link rel="preconnect" href="https://ufeoypnxbuldjutdgmpt.supabase.co" crossorigin>
+<link rel="preload" href="puzzles/calendar.json" as="fetch" crossorigin>
+<script type="module" src="game.js"></script>
+</head>
+<body>
+<div class="paper">
+<header>
+  <nav class="topbar" aria-label="Page navigation">
+    <a href="/" class="home"><span aria-hidden="true">←</span> Justin Dominic</a>
+    <div class="actions"><button id="times-button">My times</button><button id="help-button" aria-label="How to play"><span class="question" aria-hidden="true">?</span><span class="help-text">How to play</span></button></div>
+  </nav>
+  <div class="masthead">
+    <span class="pencil" aria-hidden="true"></span>
+    <h1>The Pocket Mini</h1>
+  </div>
+</header>
+<main>
+  <noscript>Turn on JavaScript to play the crossword.</noscript>
+  <div id="edition-bar" class="edition-bar" hidden>
+    <div class="edition"><b id="issue"></b><span class="dot">·</span><time id="date"></time></div>
+    <button id="clock" aria-label="Pause puzzle"><span id="clock-icon" aria-hidden="true"></span><span id="elapsed">0:00</span></button>
+  </div>
+  <div id="notice" role="status"></div>
+  <div id="game" class="game" hidden>
+    <section class="solve" aria-label="Crossword puzzle">
+      <div class="board-wrap">
+        <div id="board" role="grid" aria-label="Crossword" aria-describedby="keys-help"></div>
+        <p id="keys-help" class="sr">Type letters to fill the puzzle. Tab changes clue. Space changes direction. Escape leaves the grid.</p>
+      </div>
+      <div class="clue-strip">
+        <button id="prev" aria-label="Previous clue">‹</button>
+        <div id="active-clue" aria-live="polite" aria-atomic="true"><b id="active-id"></b><span id="active-text"></span></div>
+        <button id="next" aria-label="Next clue">›</button>
+      </div>
+      <p id="feedback" role="status"></p>
+      <div id="finish" hidden><b id="finish-time"></b><button id="share">Copy result ↗</button></div>
+      <div id="keyboard" aria-label="On-screen keyboard"></div>
+    </section>
+    <section class="clues" aria-label="All clues">
+      <div class="clue-group"><h2>Across <span aria-hidden="true">→</span></h2><ol id="across"></ol></div>
+      <div class="clue-group"><h2>Down <span aria-hidden="true">↓</span></h2><ol id="down"></ol></div>
+    </section>
+  </div>
+  <a id="today-link" href="./" hidden>Play today’s mini →</a>
+</main>
+<dialog id="panel" aria-labelledby="panel-title">
+  <div class="dialog-head"><h2 id="panel-title"></h2><button id="close" aria-label="Close">×</button></div>
+  <div id="panel-body"></div>
+</dialog>
+</div>
+</body>
+</html>
