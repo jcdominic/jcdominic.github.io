@@ -1,0 +1,12 @@
+/* Deliberately almost nothing. The browser's defaults are the design.
+   Mobile is handled by the viewport meta tag in each page's <head>. */
+
+/* Keep photos inside the screen on phones, at their original aspect ratio. */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 2em 0;
+}
