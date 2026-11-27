@@ -643,6 +643,8 @@ document.addEventListener("keydown", (e) => {
   keys.add(e.code);
   if (e.code === "KeyE") use(stationAt());
   if (e.code === "Escape" && !locked()) setState("menu");
+  // Any key except Esc counts as a gesture, so the browser lets us grab the mouse again.
+  else if (!locked()) lock();
   if (e.code.startsWith("Arrow") || e.code === "Space") e.preventDefault();
 });
 document.addEventListener("keyup", (e) => keys.delete(e.code));
@@ -659,6 +661,20 @@ document.addEventListener("mousedown", (e) => {
   if (id) use(id);
   else lock();
 });
+
+// Without the mouse captured, the hidden cursor can hit the edge of the window and stop
+// you turning. So pushing it against the left or right edge keeps turning you that way.
+const pointer = { x: 0, inside: false };
+canvas.addEventListener("mousemove", (e) => ((pointer.x = e.clientX), (pointer.inside = true)));
+canvas.addEventListener("mouseleave", () => (pointer.inside = false));
+function edgeTurn(dt) {
+  if (touch || locked() || !pointer.inside) return;
+  const zone = Math.min(80, innerWidth * 0.08);
+  let push = 0;
+  if (pointer.x < zone) push = -(1 - pointer.x / zone);
+  else if (pointer.x > innerWidth - zone) push = 1 - (innerWidth - pointer.x) / zone;
+  if (push) look(push * 2.6 * dt, 0);
+}
 
 // Touch, Pocket Edition style: an arrow pad in the corner (jump in the middle),
 // drag anywhere else to look around, tap things to use them.
@@ -754,6 +770,7 @@ function frame(now) {
   last = now;
 
   if (state === "playing") {
+    edgeTurn(dt);
     move(dt);
     if (!touch) {
       const next = stationAt();
@@ -795,6 +812,6 @@ window.apartment = {
   goto(x, z, yaw = player.yaw, pitch = player.pitch) {
     Object.assign(player, { x, z, yaw, pitch, y: 0, vy: 0 });
   },
-  where: () => ({ x: player.x, y: player.y, z: player.z }),
+  where: () => ({ x: player.x, y: player.y, z: player.z, yaw: player.yaw }),
   use,
 };
