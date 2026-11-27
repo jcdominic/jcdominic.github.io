@@ -2,31 +2,28 @@ name: GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
+
+permissions:
+  contents: write
+
 jobs:
-  deployment:
-    runs-on: ubuntu-20.04
-    environment: production
+  deploy:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        persist-credentials: false
-    - name: Setup Node
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-    - name: Install
-      run: npm ci
-    - name: Build and Deploy
-      env:
-        NODE_ENV: production
-        # Remove this line if you would like to skip using google analytics
-        # REACT_APP_GA_TRACKING_ID: UA-68649021-1
-        # This is set automatically by github
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-          git config user.name "Automated"
-          git config user.email "actions@users.noreply.github.com"
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/jcdominic/jcdominic.github.io.git
-          npm run deploy
+      - uses: actions/checkout@v4
+      - name: Copy site/ and drop draft pages
+        # Any folder containing a file named DRAFT is left out of the deploy.
+        run: |
+          cp -R site _site
+          find _site -mindepth 2 -name DRAFT -type f | while read -r f; do
+            echo "Skipping draft: $(dirname "$f")"
+            rm -rf "$(dirname "$f")"
+          done
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          cname: justincdominic.com
+          enable_jekyll: false
