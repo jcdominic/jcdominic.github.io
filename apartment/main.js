@@ -312,12 +312,13 @@ const tvScreen = art(tvCanvas, 2.8, 1.58, { glow: true });
 // ---------- pennants (above the TV) ----------
 {
   const g = station("pennants");
-  [["bengals", 3.95, 0.07], ["lakers", 5.0, -0.05], ["yale", 6.05, 0.06]].forEach(([kind, z, tilt], i) => {
-    const flag = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.5), cutout(T.pennant(kind)));
+  const len = 0.85;
+  [["bengals", 3.55, 0.07], ["lakers", 4.5, -0.05], ["dodgers", 5.45, 0.04], ["yale", 6.4, -0.06]].forEach(([kind, z, tilt], i) => {
+    const flag = new THREE.Mesh(new THREE.PlaneGeometry(len, len / 2), cutout(T.pennant(kind)));
     flag.position.set(W - 0.03 - i * 0.004, 3.0, z);
     flag.rotation.set(0, -Math.PI / 2, tilt);
     g.add(flag);
-    box(W - 0.05, 3.17, z - 0.47, W - 0.02, 3.23, z - 0.41, color("#a0aec0"), { parent: g });
+    box(W - 0.05, 3.15, z - len / 2 + 0.03, W - 0.02, 3.21, z - len / 2 + 0.09, color("#a0aec0"), { parent: g });
   });
 }
 
