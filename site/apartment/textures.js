@@ -430,12 +430,16 @@ export function pennant(kind) {
       } else if (kind === "lakers") {
         color = x < 3 ? "#fdb927" : "#552583";
         if (Math.abs(y + 0.5 - h / 2) < 1.6) color = "#fdb927";
+      } else if (kind === "dodgers") {
+        color = x < 3 ? "#ffffff" : "#005a9c";
+        if (x >= 3 && x < 4) color = "#ef3e42";
       } else {
         color = x < 3 ? "#ffffff" : "#00356b";
       }
       px(ctx, x, y, color);
     }
   if (kind === "yale") text(ctx, "YALE", 5, 6, "#ffffff");
+  if (kind === "dodgers") text(ctx, "LA", 7, 6, "#ffffff");
   return c;
 }
 
