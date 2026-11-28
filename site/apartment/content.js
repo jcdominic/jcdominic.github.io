@@ -226,6 +226,7 @@ export const stations = {
         items: [
           { title: "Cincinnati Bengals", meta: "Football" },
           { title: "Los Angeles Lakers", meta: "Basketball" },
+          { title: "Los Angeles Dodgers", meta: "Baseball" },
           { title: "Yale Bulldogs", meta: "Alma mater" },
         ],
       },
